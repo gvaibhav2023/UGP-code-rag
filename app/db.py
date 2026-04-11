@@ -1,8 +1,11 @@
 # app/db.py
 
 import os
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+
+load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
@@ -11,7 +14,7 @@ if not DATABASE_URL:
 
 engine = create_engine(
     DATABASE_URL,
-    pool_pre_ping=True,   # ✅ important for Render / cloud
+    pool_pre_ping=True,
 )
 
 SessionLocal = sessionmaker(
@@ -21,3 +24,9 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
+
+# ✅ ADD THIS FUNCTION
+def init_db():
+    from app import models   # import models so tables are registered
+    #Base.metadata.create_all(bind=engine)
+    pass
